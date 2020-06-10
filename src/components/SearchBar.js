@@ -1,33 +1,34 @@
 import React, { Fragment, useState } from "react";
 
-const SearchBar = () => {
-  const [{ video, visibility }, setVideo] = useState({
+const SearchBar = ({ onHandleSubmit }) => {
+  const [{ video }, setVideo] = useState({
     video: "",
-    visibility: true,
   });
+
   const handleChange = (e) => {
     const { value: video } = e.target;
     setVideo((prevState) => ({ ...prevState, video }));
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (video?.trim()) {
+      onHandleSubmit(video);
+    }
+    setVideo((prevState) => ({ ...prevState, video: "" }));
+  };
+
   return (
     <Fragment>
       <div>
-        <input
-          type="text"
-          placeholder="Enter a video name"
-          onChange={handleChange}
-        />
-        <p>{visibility ? video : "*".repeat(video.length)}</p>
-        <button
-          onClick={(e) => {
-            setVideo((prevState) => ({
-              ...prevState,
-              visibility: !visibility,
-            }));
-          }}
-        >
-          Toggle Video
-        </button>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Enter your search term"
+            onChange={handleChange}
+            value={video}
+          />
+          <button>Submit search</button>
+        </form>
       </div>
     </Fragment>
   );
