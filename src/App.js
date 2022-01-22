@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { SearchBar } from "./components";
 import youtube from "./api/youtube";
+import { Form } from "./components/Form";
 
 const fetchYoutubeData = async (searchWord, setVideos, setIsLoading) => {
   try {
@@ -25,6 +26,7 @@ const fetchYoutubeData = async (searchWord, setVideos, setIsLoading) => {
 };
 
 const App = () => {
+  const [parentField, setParentField] = useState({});
   const [videos, setVideos] = useState([]);
   const [searchTerm, setSearchTerm] = useState(() => {
     const listOfSearchTerms = [
@@ -53,6 +55,10 @@ const App = () => {
     fetchYoutubeData(searchTerm, setVideos, setIsLoading);
   };
 
+  const handleChange = (fields) => {
+    // console.log("see me", fields);
+    setParentField((state) => ({ ...state, ...fields }));
+  };
   return (
     <Fragment>
       <h1>First Order Component</h1>
@@ -84,6 +90,8 @@ const App = () => {
           )}
         </div>
       )}
+      <Form onChange={handleChange} />
+      <pre>{JSON.stringify(parentField, null, 2)}</pre>
     </Fragment>
   );
 };
